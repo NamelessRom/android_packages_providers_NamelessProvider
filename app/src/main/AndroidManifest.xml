@@ -35,8 +35,8 @@
             android:name=".preference.Preferences"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="org.namelessrom.providers.activities.Preferences" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
