@@ -1,0 +1,21 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="label_shadow">
+        <item name="android:shadowColor">@color/text_shadow_opaque</item>
+        <item name="android:shadowRadius">2.0</item>
+    </style>
+
+    <style name="transparent">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorForeground">#fff</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+</resources>
