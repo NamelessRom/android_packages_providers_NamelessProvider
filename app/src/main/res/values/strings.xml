@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General Strings -->
+    <string name="unknown">Unknown</string>
+    <string name="menu_done">Done</string>
+    <string name="refresh">Refresh</string>
+
+    <!-- Weather - Speed units -->
+    <string name="weather_kph">kph</string>
+    <string name="weather_mph">mph</string>
+
+    <!-- Weather - Wind directions -->
+    <string name="weather_N">N</string>
+    <string name="weather_NE">NE</string>
+    <string name="weather_E">E</string>
+    <string name="weather_SE">SE</string>
+    <string name="weather_S">S</string>
+    <string name="weather_SW">SW</string>
+    <string name="weather_W">W</string>
+    <string name="weather_NW">NW</string>
+
+    <!-- Weather - Update frequency -->
+    <string name="weather_refresh_manual">Manual</string>
+    <string name="weather_refresh_30min">30 minutes</string>
+    <string name="weather_refresh_60min">60 minutes</string>
+    <string name="weather_refresh_2hrs">2 hours</string>
+    <string name="weather_refresh_4hrs">4 hours</string>
+    <string name="weather_refresh_6hrs">6 hours</string>
+    <string name="weather_refresh_8hrs">8 hours</string>
+
+    <!-- Preferences - Categories -->
+    <string name="weather_category">Weather</string>
+
+    <!-- Preferences - Categories -->
+    <string name="general_category">General</string>
+    <string name="display_category">Display</string>
+
+    <!-- Preferences - Weather -->
+    <string name="weather_source_title">Weather source</string>
+    <string name="weather_use_custom_location">Use custom location</string>
+    <string name="weather_geolocated">Geolocated using network</string>
+    <string name="weather_custom_location_dialog_title">Enter location</string>
+    <string name="weather_custom_location_hint">City, State/Country</string>
+    <string name="weather_custom_location_title">Location</string>
+    <string name="weather_refresh_interval">Update interval</string>
+    <string name="weather_use_metric">Use metric</string>
+    <string name="weather_retrieve_location_dialog_title">Cannot retrieve location!</string>
+    <string name="weather_retrieve_location_dialog_message">Network geolocation is disabled.\n\nSet a custom location or enable network location</string>
+    <string name="weather_retrieve_location_dialog_enable_button">Enable</string>
+    <string name="weather_progress_title">Verifying location</string>
+    <string name="weather_select_location">Select location</string>
+
+    <!-- Toasts - Weather -->
+    <string name="updating_weather">Updating weather…</string>
+
+</resources>
