@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Nameless Provider</string>
+    <!-- Weather sources -->
+    <string name="weather_source_yahoo" translatable="false">Yahoo! Weather</string>
+    <string name="weather_source_openweathermap" translatable="false">OpenWeatherMap</string>
+    <!-- Forecast unavailable -->
+    <string name="weather_3200" translatable="false" />
+</resources>
