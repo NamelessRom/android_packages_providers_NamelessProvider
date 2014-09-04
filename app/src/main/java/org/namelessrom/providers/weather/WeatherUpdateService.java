@@ -39,6 +39,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.namelessrom.providers.misc.Constants;
+import org.namelessrom.providers.misc.Logger;
 import org.namelessrom.providers.misc.Preferences;
 import org.namelessrom.providers.misc.Utils;
 
@@ -46,7 +47,6 @@ import java.util.Date;
 
 public class WeatherUpdateService extends Service {
     private static final String  TAG = "WeatherUpdateService";
-    private static final boolean D   = Constants.DEBUG;
 
     public static final  String ACTION_FORCE_UPDATE           =
             "org.namelessrom.providers.weather.action.FORCE_WEATHER_UPDATE";
@@ -75,7 +75,7 @@ public class WeatherUpdateService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (D) Log.v(TAG, "Got intent " + intent);
+        Logger.v(TAG, "Got intent " + intent);
 
         boolean active = mTask != null && mTask.getStatus() != AsyncTask.Status.FINISHED;
 
@@ -88,13 +88,13 @@ public class WeatherUpdateService extends Service {
         }
 
         if (active) {
-            if (D) Log.v(TAG, "Weather update is still active, not starting new update");
+            Logger.v(TAG, "Weather update is still active, not starting new update");
             return START_REDELIVER_INTENT;
         }
 
         boolean force = ACTION_FORCE_UPDATE.equals(intent.getAction());
         if (!shouldUpdate(force)) {
-            Log.d(TAG, "Service started, but shouldn't update ... stopping");
+            Logger.d(TAG, "Service started, but shouldn't update ... stopping");
             stopSelf();
             sendCancelledBroadcast();
             return START_NOT_STICKY;
@@ -128,7 +128,7 @@ public class WeatherUpdateService extends Service {
     private boolean shouldUpdate(boolean force) {
         long interval = Preferences.weatherRefreshIntervalInMs(this);
         if (interval == 0 && !force) {
-            if (D) Log.v(TAG, "Interval set to manual and update not forced, skip update");
+            Logger.v(TAG, "Interval set to manual and update not forced, skip update");
             return false;
         }
 
@@ -140,10 +140,10 @@ public class WeatherUpdateService extends Service {
         long lastUpdate = Preferences.lastWeatherUpdateTimestamp(this);
         long due = lastUpdate + interval;
 
-        if (D) Log.d(TAG, "Now " + now + " due " + due + "(" + new Date(due) + ")");
+        Logger.d(TAG, "Now " + now + " due " + due + "(" + new Date(due) + ")");
 
         if (lastUpdate != 0 && now < due) {
-            if (D) Log.v(TAG, "Weather update is not due yet");
+            Logger.v(TAG, "Weather update is not due yet");
             return false;
         }
 
@@ -155,7 +155,7 @@ public class WeatherUpdateService extends Service {
         private Context  mContext;
 
         public WeatherUpdateTask() {
-            if (D) Log.d(TAG, "Starting weather update task");
+            Logger.d(TAG, "Starting weather update task");
             PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
             mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
             mWakeLock.setReferenceCounted(false);
@@ -164,14 +164,14 @@ public class WeatherUpdateService extends Service {
 
         @Override
         protected void onPreExecute() {
-            if (D) Log.d(TAG, "ACQUIRING WAKELOCK");
+            Logger.d(TAG, "ACQUIRING WAKELOCK");
             mWakeLock.acquire();
         }
 
         private Location getCurrentLocation() {
             LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             Location location = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-            if (D) Log.v(TAG, "Current location is " + location);
+            Logger.v(TAG, "Current location is " + location);
 
             // If lastKnownLocation is not present (because none of the apps in the
             // device has requested the current location to the system yet) or outdated,
@@ -182,7 +182,7 @@ public class WeatherUpdateService extends Service {
                 needsUpdate = delta > OUTDATED_LOCATION_THRESHOLD_MILLIS;
             }
             if (needsUpdate) {
-                if (D) Log.d(TAG, "Getting best location provider");
+                Logger.d(TAG, "Getting best location provider");
                 String locationProvider = lm.getBestProvider(sLocationCriteria, true);
                 if (TextUtils.isEmpty(locationProvider)) {
                     Log.e(TAG, "No available location providers matching criteria.");
@@ -250,7 +250,7 @@ public class WeatherUpdateService extends Service {
 
         private void finish(WeatherInfo result) {
             if (result != null) {
-                if (D) Log.d(TAG, "Weather update received, caching data and updating widget");
+                Logger.d(TAG, "Weather update received, caching data and updating widget");
                 long now = System.currentTimeMillis();
                 Preferences.setCachedWeatherInfo(mContext, now, result);
                 scheduleUpdate(mContext, Preferences.weatherRefreshIntervalInMs(mContext), false);
@@ -262,7 +262,7 @@ public class WeatherUpdateService extends Service {
                 // when network comes back
             } else {
                 // failure, schedule next download in 30 minutes
-                if (D) Log.d(TAG, "Weather refresh failed, scheduling update in 30 minutes");
+                Logger.d(TAG, "Weather refresh failed, scheduling update in 30 minutes");
                 long interval = 30 * 60 * 1000;
                 scheduleUpdate(mContext, interval, false);
             }
@@ -272,7 +272,7 @@ public class WeatherUpdateService extends Service {
             finishedIntent.putExtra(EXTRA_UPDATE_CANCELLED, result == null);
             sendBroadcast(finishedIntent);
 
-            if (D) Log.d(TAG, "RELEASING WAKELOCK");
+            Logger.d(TAG, "RELEASING WAKELOCK");
             mWakeLock.release();
             stopSelf();
         }
@@ -285,7 +285,7 @@ public class WeatherUpdateService extends Service {
 
         static void registerIfNeeded(Context context, String provider) {
             synchronized (WeatherLocationListener.class) {
-                if (D) Log.d(TAG, "Registering location listener");
+                Logger.d(TAG, "Registering location listener");
                 if (sInstance == null) {
                     final Context appContext = context.getApplicationContext();
                     final LocationManager locationManager =
@@ -300,7 +300,7 @@ public class WeatherUpdateService extends Service {
                     // change this if this call receive different providers
                     LocationProvider lp = locationManager.getProvider(provider);
                     if (lp != null) {
-                        if (D) Log.d(TAG, "LocationManager - Requesting single update");
+                        Logger.d(TAG, "LocationManager - Requesting single update");
                         locationManager.requestSingleUpdate(provider, sInstance,
                                 appContext.getMainLooper());
                         sInstance.setTimeoutAlarm();
@@ -315,7 +315,7 @@ public class WeatherUpdateService extends Service {
                     final Context appContext = context.getApplicationContext();
                     final LocationManager locationManager =
                             (LocationManager) appContext.getSystemService(Context.LOCATION_SERVICE);
-                    if (D) Log.d(TAG, "Aborting location request after timeout");
+                    Logger.d(TAG, "Aborting location request after timeout");
                     locationManager.removeUpdates(sInstance);
                     sInstance.cancelTimeoutAlarm();
                     sInstance = null;
@@ -351,7 +351,7 @@ public class WeatherUpdateService extends Service {
         @Override
         public void onLocationChanged(Location location) {
             // Now, we have a location to use. Schedule a weather update right now.
-            if (D) Log.d(TAG, "The location has changed, schedule an update ");
+            Logger.d(TAG, "The location has changed, schedule an update ");
             synchronized (WeatherLocationListener.class) {
                 WeatherUpdateService.scheduleUpdate(mContext, 0, true);
                 cancelTimeoutAlarm();
@@ -362,7 +362,7 @@ public class WeatherUpdateService extends Service {
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
             // Now, we have a location to use. Schedule a weather update right now.
-            if (D) Log.d(TAG, "The location service has become available, schedule an update ");
+            Logger.d(TAG, "The location service has become available, schedule an update ");
             if (status == LocationProvider.AVAILABLE) {
                 synchronized (WeatherLocationListener.class) {
                     WeatherUpdateService.scheduleUpdate(mContext, 0, true);
@@ -387,7 +387,7 @@ public class WeatherUpdateService extends Service {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         long due = System.currentTimeMillis() + timeFromNow;
 
-        if (D) Log.d(TAG, "Scheduling next update at " + new Date(due));
+        Logger.d(TAG, "Scheduling next update at " + new Date(due));
         am.set(AlarmManager.RTC_WAKEUP, due, getUpdateIntent(context, force));
     }
 

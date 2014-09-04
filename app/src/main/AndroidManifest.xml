@@ -46,7 +46,13 @@
         <!-- Preferences fragments -->
         <activity android:name=".preference.WeatherPreferences" />
 
-        <!-- The weather forecast activity -->
+        <!-- Receivers -->
+        <receiver android:name=".receivers.AwesomeReceiver">
+            <intent-filter>
+                <action android:name="org.namelessrom.providers.weather.action.REQUEST_WEATHER_UPDATE" />
+                <action android:name="org.namelessrom.providers.weather.action.FORCE_WEATHER_UPDATE" />
+            </intent-filter>
+        </receiver>
 
         <!-- Services -->
         <service android:name=".weather.WeatherUpdateService" />
