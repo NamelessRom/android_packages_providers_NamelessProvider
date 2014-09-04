@@ -31,8 +31,16 @@ public class Logger {
         if (DEBUG) Log.d(getTag(tag), String.format("--> %s", msg));
     }
 
+    public static void e(final Object tag, final String msg, final Exception e) {
+        if (DEBUG) Log.e(getTag(tag), String.format("--> %s", msg), e);
+    }
+
     public static void v(final Object tag, final String msg) {
         if (DEBUG) Log.v(getTag(tag), String.format("--> %s", msg));
+    }
+
+    public static void w(final Object tag, final String msg) {
+        if (DEBUG) Log.w(getTag(tag), String.format("--> %s", msg));
     }
 
     private static String getTag(final Object tag) {

@@ -20,22 +20,20 @@ package org.namelessrom.providers.misc;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 public class Utils {
 
-    private static final String  TAG = "Utils";
-    private static final boolean D   = Constants.DEBUG;
+    private static final String TAG = "Utils";
 
     /**
      * Networking available check
      */
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager cm =
+    public static boolean isNetworkAvailable(final Context context) {
+        final ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo info = cm.getActiveNetworkInfo();
-        if (info == null || !info.isConnected() || !info.isAvailable()) {
-            if (D) Log.d(TAG, "No network connection is available for weather update");
+        final NetworkInfo info = cm.getActiveNetworkInfo();
+        if (info == null || !info.isAvailable() || !info.isConnected()) {
+            Logger.d(TAG, "No network connection is available for weather update");
             return false;
         }
         return true;

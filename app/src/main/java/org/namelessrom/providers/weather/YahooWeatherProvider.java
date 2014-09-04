@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.namelessrom.providers.R;
 import org.namelessrom.providers.misc.Constants;
+import org.namelessrom.providers.misc.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -106,10 +107,8 @@ public class YahooWeatherProvider implements WeatherProvider {
             }
             return results;
         } catch (JSONException e) {
-            if (Constants.DEBUG) {
-                Log.e(TAG, "Received malformed places data (input=" + input + ", " +
-                        "lang=" + language + ")", e);
-            }
+            Logger.e(TAG, "Received malformed places data (input=" + input + ", " +
+                    "lang=" + language + ")", e);
         }
         return null;
     }
@@ -145,17 +144,17 @@ public class YahooWeatherProvider implements WeatherProvider {
                         handler.temperatureUnit, handler.humidity, handler.windSpeed,
                         handler.windDirection, handler.speedUnit, handler.forecasts,
                         System.currentTimeMillis());
-                if (Constants.DEBUG) Log.d(TAG, "Weather updated: " + w);
+                Logger.d(TAG, "Weather updated: " + w);
                 return w;
             } else {
-                if (Constants.DEBUG) Log.w(TAG, "Received incomplete weather XML (id=" + id + ")");
+                Logger.w(TAG, "Received incomplete weather XML (id=" + id + ")");
             }
         } catch (ParserConfigurationException e) {
-            if (Constants.DEBUG) Log.e(TAG, "Could not create XML parser", e);
+            Logger.e(TAG, "Could not create XML parser", e);
         } catch (SAXException e) {
-            if (Constants.DEBUG) Log.e(TAG, "Could not parse weather XML (id=" + id + ")", e);
+            Logger.e(TAG, "Could not parse weather XML (id=" + id + ")", e);
         } catch (IOException e) {
-            if (Constants.DEBUG) Log.e(TAG, "Could not parse weather XML (id=" + id + ")", e);
+            Logger.e(TAG, "Could not parse weather XML (id=" + id + ")", e);
         }
 
         return null;
@@ -234,12 +233,9 @@ public class YahooWeatherProvider implements WeatherProvider {
             for (String name : PLACE_NAMES) {
                 if (!result.isNull(name)) {
                     city = result.getString(name);
-                    if (Constants.DEBUG && Log.isLoggable(TAG, Log.VERBOSE)) {
-                        Log.v(TAG, String.format(Locale.US, "Placefinder for location %f %f " +
-                                        "matched %s using %s", location.getLatitude(),
-                                location.getLongitude(), city, name
-                        ));
-                    }
+                    Logger.v(TAG, String.format(Locale.US, "Placefinder for location %f %f " +
+                                    "matched %s using %s", location.getLatitude(),
+                            location.getLongitude(), city, name));
                     break;
                 }
             }
@@ -248,23 +244,18 @@ public class YahooWeatherProvider implements WeatherProvider {
             if (city != null) {
                 city = Html.fromHtml(city).toString();
             } else {
-                if (Constants.DEBUG) Log.w(TAG, "Can not resolve place name for " + location);
+                Logger.w(TAG, "Can not resolve place name for " + location);
             }
 
-            if (Constants.DEBUG) {
-                Log.d(TAG, "Resolved location " + location + " to " + city + " (" + woeid + ")");
-            }
-
+            Logger.d(TAG, "Resolved location " + location + " to " + city + " (" + woeid + ")");
 
             WeatherInfo info = getWeatherInfo(woeid, city, metric);
             if (info != null) {
                 return info;
             }
         } catch (JSONException e) {
-            if (Constants.DEBUG) {
-                Log.e(TAG, "Received malformed placefinder data (location="
-                        + location + ", lang=" + language + ")", e);
-            }
+            Logger.e(TAG, "Received malformed placefinder data (location="
+                    + location + ", lang=" + language + ")", e);
         }
 
         return null;
@@ -288,10 +279,8 @@ public class YahooWeatherProvider implements WeatherProvider {
             }
         }
 
-        if (Constants.DEBUG && Log.isLoggable(TAG, Log.VERBOSE)) {
-            Log.v(TAG, "JSON data " + place.toString() + " -> id=" + result.id
-                    + ", city=" + result.city + ", country=" + result.countryId);
-        }
+        Logger.v(TAG, "JSON data " + place.toString() + " -> id=" + result.id
+                + ", city=" + result.city + ", country=" + result.countryId);
 
         if (result.id == null || result.city == null || result.countryId == null) {
             return null;
@@ -306,15 +295,13 @@ public class YahooWeatherProvider implements WeatherProvider {
             return null;
         }
 
-        if (Constants.DEBUG && Log.isLoggable(TAG, Log.VERBOSE)) {
-            Log.v(TAG, "Request URL is " + url + ", response is " + response);
-        }
+        Logger.v(TAG, "Request URL is " + url + ", response is " + response);
 
         try {
             JSONObject rootObject = new JSONObject(response);
             return rootObject.getJSONObject("query").getJSONObject("results");
         } catch (JSONException e) {
-            if (Constants.DEBUG) Log.w(TAG, "Received malformed places data (url=" + url + ")", e);
+            Logger.e(TAG, "Received malformed places data (url=" + url + ")", e);
         }
 
         return null;

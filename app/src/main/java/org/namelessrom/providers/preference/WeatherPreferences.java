@@ -32,7 +32,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,6 +39,7 @@ import android.widget.Toast;
 
 import org.namelessrom.providers.R;
 import org.namelessrom.providers.misc.Constants;
+import org.namelessrom.providers.misc.Logger;
 import org.namelessrom.providers.misc.Preferences;
 import org.namelessrom.providers.weather.WeatherUpdateService;
 
@@ -167,10 +167,8 @@ public class WeatherPreferences extends PreferenceFragment implements
             needWeatherUpdate = true;
         }
 
-        if (Constants.DEBUG) {
-            Log.v(TAG, "Preference " + key + " changed, need update " +
-                    needWeatherUpdate + " force update " + forceWeatherUpdate);
-        }
+        Logger.v(TAG, "Preference " + key + " changed, need update " +
+                needWeatherUpdate + " force update " + forceWeatherUpdate);
 
         if (needWeatherUpdate || forceWeatherUpdate) {
             updateWeather(forceWeatherUpdate);
