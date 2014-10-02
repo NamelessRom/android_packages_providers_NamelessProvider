@@ -4,5 +4,4 @@
   <string name="unknown">Bilinmeyen</string>
   <string name="weather_refresh_30min">30 dakika</string>
   <string name="weather_refresh_interval">Güncelleme aralığı</string>
-  <string name="weather_retrieve_location_dialog_enable_button">Aktif</string>
 </resources>

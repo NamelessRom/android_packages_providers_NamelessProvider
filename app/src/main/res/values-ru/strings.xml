@@ -34,7 +34,7 @@
   <string name="weather_use_metric">Метрическая система</string>
   <string name="weather_retrieve_location_dialog_title">Не удается определить местоположение!</string>
   <string name="weather_retrieve_location_dialog_message">Определение местоположения по сети выключено.\n\nВключите определение местоположения по сети или введите местоположение вручную</string>
-  <string name="weather_retrieve_location_dialog_enable_button">Включен</string>
+  <string name="weather_retrieve_location_dialog_enable_button">Включить</string>
   <string name="weather_progress_title">Проверка местоположения</string>
   <string name="weather_select_location">Выберите местоположение</string>
   <string name="updating_weather">Обновление погоды&#8230;</string>
